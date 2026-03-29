@@ -38,7 +38,15 @@ namespace Observa
 
         private void cbPerfis_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _perfilAtual = (PerfilValidacao)cbPerfis.SelectedItem;
+            _perfilAtual = cbPerfis.SelectedItem as PerfilValidacao;
+            if (_perfilAtual == null)
+            {
+                _validacoes = new BindingList<Validacao>();
+                dgvValidacoes.DataSource = _validacoes;
+                return;
+            }
+
+            _perfilAtual.Validacoes ??= new List<Validacao>();
 
             _validacoes = new BindingList<Validacao>(_perfilAtual.Validacoes);
 
@@ -118,6 +126,10 @@ namespace Observa
 
         private void dgvValidacoes_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0)
+                return;
+
+
             if (dgvValidacoes.Columns[e.ColumnIndex] is DataGridViewButtonColumn)
             {
                 var validacao = _validacoes[e.RowIndex];

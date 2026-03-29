@@ -11,25 +11,80 @@ namespace Observa.Services
 
     public class MonitorService
     {
+        private static void AdicionarParametros(SqlCommand cmd, string chaves)
+        {
+            if (string.IsNullOrWhiteSpace(chaves))
+                return;
+
+            var itens = chaves
+                .Split(new[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(v => v.Trim())
+                .Where(v => !string.IsNullOrWhiteSpace(v))
+                .ToList();
+
+            for (var i = 0; i < itens.Count; i++)
+            {
+                var item = itens[i];
+                var igualIndex = item.IndexOf('=');
+
+                if (igualIndex > 0)
+                {
+                    var nome = item[..igualIndex].Trim();
+                    var valor = item[(igualIndex + 1)..].Trim();
+
+                    if (!nome.StartsWith("@"))
+                        nome = $"@{nome}";
+
+                    cmd.Parameters.AddWithValue(nome, valor);
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue($"@p{i + 1}", item);
+                }
+            }
+        }
+
+
         public void ExecutarMonitoramento(AppConfig config)
         {
+
+            config.ItensMonitor ??= new List<MonitorItem>();
+            config.Perfis ??= new List<PerfilValidacao>();
+            config.Conexoes ??= new List<ConexaoConfig>();
+
             foreach (var item in config.ItensMonitor)
             {
-                var conexao = config.Conexoes
-                    .FirstOrDefault(c => c.Nome == item.Conexao);
-
+                
                 var perfil = config.Perfis
-                    .FirstOrDefault(p => p.Nome == item.Perfil);
+                    .FirstOrDefault(p => p.Id == item.PerfilId)
+                    ?? config.Perfis.FirstOrDefault(p => p.Nome == item.Perfil);
 
-                if (conexao == null || perfil == null)
+                if (perfil == null)
                     continue;
 
-                using var conn = new SqlConnection(conexao.ConnectionString);
-                conn.Open();
+                perfil.Validacoes ??= new List<Validacao>();
 
                 foreach (var validacao in perfil.Validacoes)
                 {
+                    var nomeConexao = !string.IsNullOrWhiteSpace(validacao.Conexao)
+                        ? validacao.Conexao
+                        : item.Conexao;
+
+                    var conexao = config.Conexoes
+                        .FirstOrDefault(c => c.Nome == nomeConexao);
+
+                    if (conexao == null)
+                    {
+                        validacao.StatusOK = false;
+                        validacao.Cor = "Vermelho";
+                        break;
+                    }
+
+                    using var conn = new SqlConnection(conexao.ConnectionString);
+                    conn.Open();
+
                     using var cmd = new SqlCommand(validacao.Query, conn);
+                    AdicionarParametros(cmd, item.Chaves);
                     using var reader = cmd.ExecuteReader();
 
                     bool temDados = reader.HasRows;

@@ -26,7 +26,7 @@ namespace Observa
 
         private void dgvConexoes_Load(object sender, EventArgs e)
         {
-
+            _config.Conexoes ??= new List<ConexaoConfig>();
             _conexoes = new BindingList<ConexaoConfig>(_config.Conexoes);
 
             ConfigurarGrid();
@@ -81,6 +81,9 @@ namespace Observa
 
         private async void btnTestar_Click(object sender, EventArgs e)
         {
+            dgvConexoes.EndEdit();
+            BindingContext[_conexoes]?.EndCurrentEdit();
+
             if (dgvConexoes.CurrentRow == null)
                 return;
 
@@ -102,6 +105,9 @@ namespace Observa
 
         private void btnSalvar_Click(object sender, EventArgs e)
         {
+            dgvConexoes.EndEdit();
+            BindingContext[_conexoes]?.EndCurrentEdit();
+
             _config.Conexoes = _conexoes.ToList();
 
             File.WriteAllText("config.json",
