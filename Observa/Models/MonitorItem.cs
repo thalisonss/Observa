@@ -14,6 +14,9 @@ namespace Observa.Models
         public int? PerfilId { get; set; }
         public string Conexao { get; set; }
         public string Perfil { get; set; }
+        public string Status { get; set; } = "Pendente";
+        public string Mensagem { get; set; } = string.Empty;
+        public DateTime? UltimaVerificacao { get; set; }
 
         [JsonIgnore]
         public string Nome
