@@ -24,6 +24,8 @@ namespace Observa
             InitializeComponent();
         }
 
+        #region |Controles|
+
         private void Form1_Load(object sender, EventArgs e)
         {
             _config = _configService.CarregarConfig();
@@ -34,6 +36,69 @@ namespace Observa
             dgvMonitor.DataSource = _itens;
         }
 
+        private async void btnExecutar_Click(object sender, EventArgs e)
+        {
+            btnRefresh.Enabled = false;
+
+            try
+            {
+                await _monitorService.ExecutarMonitoramentoAsync(_config);
+                dgvMonitor.Refresh();
+            }
+            finally
+            {
+                btnRefresh.Enabled = true;
+            }
+        }
+
+        private void btnSalvar_Click(object sender, EventArgs e)
+        {
+            _config.ItensMonitor = _itens.ToList();
+
+            _configService.SalvarConfig(_config);
+
+            MessageBox.Show("Configuração salva!");
+        }
+
+        private void dgvMonitor_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvMonitor.Columns[e.ColumnIndex].DataPropertyName == "Status")
+            {
+                var valor = e.Value?.ToString();
+
+                if (valor == "Verde")
+                    e.CellStyle.BackColor = Color.LightGreen;
+
+                else if (valor == "Vermelho")
+                    e.CellStyle.BackColor = Color.LightCoral;
+
+                else if (valor == "Amarelo")
+                    e.CellStyle.BackColor = Color.Khaki;
+            }
+        }
+
+        private void dgvMonitor_DefaultValuesNeeded_1(object sender, DataGridViewRowEventArgs e)
+        {
+            e.Row.Cells["Status"].Value = "Pendente";
+        }
+
+        private void btnPerfil_Click(object sender, EventArgs e)
+        {
+            var form = new frmValidacoes(_config);
+            form.ShowDialog();
+
+
+        }
+
+        private void btnConexoes_Click(object sender, EventArgs e)
+        {
+            var form = new frmConexoes(_config);
+            form.ShowDialog();
+        }
+
+        #endregion
+
+        #region |Funcoes|
         private void ConfigurarGrid()
         {
             dgvMonitor.AutoGenerateColumns = false;
@@ -104,65 +169,6 @@ namespace Observa
             dgvMonitor.AllowUserToAddRows = true;
         }
 
-        private void dgvMonitor_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            if (dgvMonitor.Columns[e.ColumnIndex].DataPropertyName == "Status")
-            {
-                var valor = e.Value?.ToString();
-
-                if (valor == "Verde")
-                    e.CellStyle.BackColor = Color.LightGreen;
-
-                else if (valor == "Vermelho")
-                    e.CellStyle.BackColor = Color.LightCoral;
-
-                else if (valor == "Amarelo")
-                    e.CellStyle.BackColor = Color.Khaki;
-            }
-        }
-
-        private async void btnExecutar_Click(object sender, EventArgs e)
-        {
-            btnRefresh.Enabled = false;
-
-            try
-            {
-                await _monitorService.ExecutarMonitoramentoAsync(_config);
-                dgvMonitor.Refresh();
-            }
-            finally
-            {
-                btnRefresh.Enabled = true;
-            }
-        }
-
-        private void btnSalvar_Click(object sender, EventArgs e)
-        {
-            _config.ItensMonitor = _itens.ToList();
-
-            _configService.SalvarConfig(_config);
-
-            MessageBox.Show("Configuração salva!");
-        }
-
-
-        private void dgvMonitor_DefaultValuesNeeded_1(object sender, DataGridViewRowEventArgs e)
-        {
-            e.Row.Cells["Status"].Value = "Pendente";
-        }
-
-        private void btnPerfil_Click(object sender, EventArgs e)
-        {
-            var form = new frmValidacoes(_config);
-            form.ShowDialog();
-
-
-        }
-
-        private void btnConexoes_Click(object sender, EventArgs e)
-        {
-            var form = new frmConexoes(_config);
-            form.ShowDialog();
-        }
+        #endregion       
     }
 }
