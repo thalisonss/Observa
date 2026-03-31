@@ -6,7 +6,6 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,9 +13,10 @@ namespace Observa
 {
     public partial class frmValidacoes : Form
     {
-        private AppConfig _config;
-        private BindingList<Validacao> _validacoes;
-        private PerfilValidacao _perfilAtual;
+        private readonly AppConfig _config;
+        private readonly Services.ConfigService _configService = new();
+        private BindingList<Validacao> _validacoes = new();
+        private PerfilValidacao? _perfilAtual;
   
 
       
@@ -147,13 +147,12 @@ namespace Observa
 
         private void btnSalvar_Click(object sender, EventArgs e)
         {
-            _perfilAtual.Validacoes = _validacoes.ToList();
+            if (_perfilAtual != null)
+            {
+                _perfilAtual.Validacoes = _validacoes.ToList();
+            }
 
-            File.WriteAllText("config.json",
-                JsonSerializer.Serialize(_config, new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                }));
+            _configService.SalvarConfig(_config);
 
             MessageBox.Show("Perfil salvo!");
         }
@@ -175,7 +174,8 @@ namespace Observa
 
         private void btnExcluirPerfil_Click(object sender, EventArgs e)
         {
-            if (_perfilAtual == null) return;
+            if (_perfilAtual == null)
+                return;
 
             _config.Perfis.Remove(_perfilAtual);
 

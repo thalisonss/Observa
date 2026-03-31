@@ -1,22 +1,25 @@
-﻿using Observa.Models;
+﻿#region |Using|
+using Observa.Models;
 using System.ComponentModel;
-using System.Text.Json;
 using Observa.Services;
+#endregion
 
 namespace Observa
 {
-    public partial class Form1 : Form
+    public partial class frmMain : Form
     {
-        private BindingList<MonitorItem> _itens;
+        #region |Variáveis|
+        private BindingList<MonitorItem> _itens = new();
+
+        private readonly ConfigService _configService = new();
+        private readonly MonitorService _monitorService = new();
+
+        
+        private AppConfig _config = new();
+        #endregion
 
 
-        private ConfigService _configService = new ConfigService();
-        private MonitorService _monitorService = new MonitorService();
-
-        private ConexaoConfig _configConexao;
-        private AppConfig _config;
-
-        public Form1()
+        public frmMain()
         {
             InitializeComponent();
         }
@@ -120,24 +123,24 @@ namespace Observa
 
         private async void btnExecutar_Click(object sender, EventArgs e)
         {
-            btnExecutar.Enabled = false;
+            btnRefresh.Enabled = false;
 
-            _monitorService.ExecutarMonitoramento(_config);
-
-            dgvMonitor.Refresh();
-
-            btnExecutar.Enabled = true;
+            try
+            {
+                await _monitorService.ExecutarMonitoramentoAsync(_config);
+                dgvMonitor.Refresh();
+            }
+            finally
+            {
+                btnRefresh.Enabled = true;
+            }
         }
 
         private void btnSalvar_Click(object sender, EventArgs e)
         {
             _config.ItensMonitor = _itens.ToList();
 
-            File.WriteAllText("config.json",
-                JsonSerializer.Serialize(_config, new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                }));
+            _configService.SalvarConfig(_config);
 
             MessageBox.Show("Configuração salva!");
         }

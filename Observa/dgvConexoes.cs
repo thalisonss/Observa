@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Data.SqlClient;
@@ -21,8 +20,9 @@ namespace Observa
             _config = config;
         }
 
-        private AppConfig _config;
-        private BindingList<ConexaoConfig> _conexoes;
+        private readonly AppConfig _config;
+        private readonly Services.ConfigService _configService = new();
+        private BindingList<ConexaoConfig> _conexoes = new();
 
         private void dgvConexoes_Load(object sender, EventArgs e)
         {
@@ -110,11 +110,7 @@ namespace Observa
 
             _config.Conexoes = _conexoes.ToList();
 
-            File.WriteAllText("config.json",
-                JsonSerializer.Serialize(_config, new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                }));
+            _configService.SalvarConfig(_config);
 
             MessageBox.Show("Conexões salvas!");
         }

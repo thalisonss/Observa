@@ -10,7 +10,12 @@ namespace Observa.Services
 {
     public class ConfigService
     {
-        private readonly string _path = "config.json";
+        private readonly string _path;
+
+        public ConfigService(string? path = null)
+        {
+            _path = path ?? Path.Combine(AppContext.BaseDirectory, "config.json");
+        }
 
         public AppConfig CarregarConfig()
         {
@@ -18,7 +23,7 @@ namespace Observa.Services
                 return new AppConfig();
 
             var json = File.ReadAllText(_path);
-            return JsonSerializer.Deserialize<AppConfig>(json);
+            return JsonSerializer.Deserialize<AppConfig>(json) ?? new AppConfig();
         }
 
         public void SalvarConfig(AppConfig config)

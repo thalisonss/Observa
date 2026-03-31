@@ -3,8 +3,7 @@ using Observa.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
 
 namespace Observa.Services
 {
@@ -45,7 +44,7 @@ namespace Observa.Services
         }
 
 
-        public void ExecutarMonitoramento(AppConfig config)
+        public async Task ExecutarMonitoramentoAsync(AppConfig config)
         {
 
             config.ItensMonitor ??= new List<MonitorItem>();
@@ -103,13 +102,13 @@ namespace Observa.Services
                         }
 
                         using var conn = new SqlConnection(conexao.ConnectionString);
-                        conn.Open();
+                        await conn.OpenAsync();
 
                         using var cmd = new SqlCommand(validacao.Query, conn);
                         AdicionarParametros(cmd, item.Chaves);
-                        using var reader = cmd.ExecuteReader();
+                        using var reader = await cmd.ExecuteReaderAsync(CommandBehavior.SingleRow);
 
-                        bool temDados = reader.HasRows;
+                        bool temDados = await reader.ReadAsync();
 
                         bool ok = validacao.TipoRetorno == TipoRetorno.RetornarDados
                             ? temDados
