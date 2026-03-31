@@ -33,33 +33,38 @@
             btnNovoPerfil = new Button();
             btnExcluirPerfil = new Button();
             btnSalvar = new Button();
+            groupBox1 = new GroupBox();
             ((System.ComponentModel.ISupportInitialize)dgvValidacoes).BeginInit();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // dgvValidacoes
             // 
             dgvValidacoes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvValidacoes.Location = new Point(79, 102);
+            dgvValidacoes.Location = new Point(12, 70);
+            dgvValidacoes.Margin = new Padding(3, 2, 3, 2);
             dgvValidacoes.Name = "dgvValidacoes";
             dgvValidacoes.RowHeadersWidth = 51;
-            dgvValidacoes.Size = new Size(1095, 482);
+            dgvValidacoes.Size = new Size(958, 362);
             dgvValidacoes.TabIndex = 1;
             dgvValidacoes.CellContentClick += dgvValidacoes_CellContentClick;
             // 
             // cbPerfis
             // 
             cbPerfis.FormattingEnabled = true;
-            cbPerfis.Location = new Point(104, 35);
+            cbPerfis.Location = new Point(24, 21);
+            cbPerfis.Margin = new Padding(3, 2, 3, 2);
             cbPerfis.Name = "cbPerfis";
-            cbPerfis.Size = new Size(151, 28);
+            cbPerfis.Size = new Size(133, 23);
             cbPerfis.TabIndex = 2;
             cbPerfis.SelectedIndexChanged += cbPerfis_SelectedIndexChanged;
             // 
             // btnNovoPerfil
             // 
-            btnNovoPerfil.Location = new Point(672, 39);
+            btnNovoPerfil.Location = new Point(591, 12);
+            btnNovoPerfil.Margin = new Padding(3, 2, 3, 2);
             btnNovoPerfil.Name = "btnNovoPerfil";
-            btnNovoPerfil.Size = new Size(94, 29);
+            btnNovoPerfil.Size = new Size(82, 22);
             btnNovoPerfil.TabIndex = 3;
             btnNovoPerfil.Text = "button1";
             btnNovoPerfil.UseVisualStyleBackColor = true;
@@ -67,9 +72,10 @@
             // 
             // btnExcluirPerfil
             // 
-            btnExcluirPerfil.Location = new Point(826, 39);
+            btnExcluirPerfil.Location = new Point(705, 12);
+            btnExcluirPerfil.Margin = new Padding(3, 2, 3, 2);
             btnExcluirPerfil.Name = "btnExcluirPerfil";
-            btnExcluirPerfil.Size = new Size(94, 29);
+            btnExcluirPerfil.Size = new Size(82, 22);
             btnExcluirPerfil.TabIndex = 4;
             btnExcluirPerfil.Text = "button1";
             btnExcluirPerfil.UseVisualStyleBackColor = true;
@@ -77,28 +83,41 @@
             // 
             // btnSalvar
             // 
-            btnSalvar.Location = new Point(1050, 607);
+            btnSalvar.Location = new Point(847, 24);
+            btnSalvar.Margin = new Padding(3, 2, 3, 2);
             btnSalvar.Name = "btnSalvar";
-            btnSalvar.Size = new Size(94, 29);
+            btnSalvar.Size = new Size(94, 25);
             btnSalvar.TabIndex = 5;
             btnSalvar.Text = "button1";
             btnSalvar.UseVisualStyleBackColor = true;
             btnSalvar.Click += btnSalvar_Click;
             // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(cbPerfis);
+            groupBox1.Location = new Point(18, 8);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(200, 100);
+            groupBox1.TabIndex = 6;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "groupBox1";
+            // 
             // frmValidacoes
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1252, 686);
+            ClientSize = new Size(978, 484);
+            Controls.Add(groupBox1);
             Controls.Add(btnSalvar);
             Controls.Add(btnExcluirPerfil);
             Controls.Add(btnNovoPerfil);
-            Controls.Add(cbPerfis);
             Controls.Add(dgvValidacoes);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "frmValidacoes";
             Text = "Form2";
             Load += frmValidacoes_Load;
             ((System.ComponentModel.ISupportInitialize)dgvValidacoes).EndInit();
+            groupBox1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -109,5 +128,6 @@
         private Button btnNovoPerfil;
         private Button btnExcluirPerfil;
         private Button btnSalvar;
+        private GroupBox groupBox1;
     }
 }

@@ -18,7 +18,6 @@ namespace Observa
         private AppConfig _config = new();
         #endregion
 
-
         public frmMain()
         {
             InitializeComponent();

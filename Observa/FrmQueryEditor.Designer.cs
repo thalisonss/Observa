@@ -37,39 +37,44 @@
             // txtQuery
             // 
             txtQuery.Dock = DockStyle.Fill;
-            txtQuery.Location = new Point(3, 23);
+            txtQuery.Location = new Point(3, 18);
+            txtQuery.Margin = new Padding(3, 2, 3, 2);
             txtQuery.Multiline = true;
             txtQuery.Name = "txtQuery";
-            txtQuery.Size = new Size(762, 367);
+            txtQuery.Size = new Size(666, 275);
             txtQuery.TabIndex = 0;
             // 
             // groupBox1
             // 
             groupBox1.Controls.Add(txtQuery);
-            groupBox1.Location = new Point(20, 17);
+            groupBox1.Location = new Point(18, 13);
+            groupBox1.Margin = new Padding(3, 2, 3, 2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(768, 393);
+            groupBox1.Padding = new Padding(3, 2, 3, 2);
+            groupBox1.Size = new Size(672, 295);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
-            groupBox1.Text = "groupBox1";
+            groupBox1.Text = "Query";
             // 
             // btnOK
             // 
-            btnOK.Location = new Point(364, 420);
+            btnOK.Location = new Point(318, 315);
+            btnOK.Margin = new Padding(3, 2, 3, 2);
             btnOK.Name = "btnOK";
-            btnOK.Size = new Size(94, 29);
+            btnOK.Size = new Size(82, 22);
             btnOK.TabIndex = 2;
-            btnOK.Text = "button1";
+            btnOK.Text = "OK";
             btnOK.UseVisualStyleBackColor = true;
             btnOK.Click += btnOK_Click;
             // 
             // FrmQueryEditor
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(700, 338);
             Controls.Add(btnOK);
             Controls.Add(groupBox1);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "FrmQueryEditor";
             Text = "FrmQueryEditor";
             groupBox1.ResumeLayout(false);
